@@ -57,7 +57,7 @@ export function AIChat() {
             <Sparkles size={18} style={{ color: '#00D09C' }} />
           </div>
           <div>
-            <h2 className="text-base font-bold" style={{ color: '#111111' }}>Groww AI</h2>
+            <h2 className="text-base font-bold" style={{ color: '#111111' }}>GrownUp AI</h2>
             <div className="flex items-center gap-1.5 mt-0.5">
               <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#00D09C' }} />
               <p className="text-[10px] font-medium" style={{ color: '#888888' }}>Intelligent product guidance</p>
@@ -131,7 +131,7 @@ export function AIChat() {
                 </div>
               )}
               
-              <p className="text-sm leading-relaxed whitespace-pre-line font-medium text-[#222222]">
+              <p className="text-sm leading-relaxed whitespace-pre-line font-medium">
                 {msg.content}
               </p>
               

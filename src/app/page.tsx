@@ -43,22 +43,20 @@ export default function Home() {
   if (viewMode === 'desktop') {
     return (
       <div className="min-h-screen" style={{ background: '#F7F7F2' }}>
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed bottom-6 right-8 z-50 flex flex-col items-end gap-3 animate-fade-in">
           <button
             onClick={() => setViewMode('mobile')}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:scale-[1.02]"
+            className="flex items-center gap-2 px-5 py-3 rounded-full text-[13px] font-bold transition-all duration-200 hover:scale-[1.02] shadow-sm"
             style={{ 
-              background: 'white', 
-              color: '#111111',
-              border: '1px solid #E5E5E0',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+              background: '#111111', 
+              color: 'white',
             }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
               <line x1="12" y1="18" x2="12.01" y2="18"/>
             </svg>
-            Mobile mode
+            Switch to Mobile View
           </button>
         </div>
         <DesktopApp />

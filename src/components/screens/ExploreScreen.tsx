@@ -32,7 +32,7 @@ export function ExploreScreen() {
       </div>
 
       {/* Categories */}
-      <div className="flex gap-2.5 overflow-x-auto pb-2 -mx-5 px-5 phone-scroll mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+      <div className="flex gap-2.5 overflow-x-auto pb-4 -mx-5 px-5 phone-scroll-x mb-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
         {exploreCategories.filter(c => c.id !== 'learning').map((cat) => (
           <button
             key={cat.id}
@@ -56,7 +56,7 @@ export function ExploreScreen() {
           </div>
           <div className="text-left">
             <p className="text-[13px] font-bold text-[#111111]">Not sure what you're looking for?</p>
-            <p className="text-[11px] text-[#555555]">Ask Groww AI to guide you.</p>
+            <p className="text-[11px] text-[#555555]">Ask GrownUp AI to guide you.</p>
           </div>
         </div>
         <Sparkles size={16} style={{ color: '#00D09C' }} />
@@ -64,25 +64,49 @@ export function ExploreScreen() {
 
       {/* TRENDING IN YOUR CIRCLE */}
       <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-        <div className="flex items-center gap-2 mb-4">
+        <button 
+          onClick={() => useAppStore.setState({ circleOpen: true })}
+          className="flex items-center gap-2 mb-4 active:scale-[0.98] transition-transform"
+        >
           <Users size={16} style={{ color: '#5B8DEF' }} />
           <h3 className="text-[14px] font-bold" style={{ color: '#111111' }}>Trending in your Circle</h3>
-        </div>
+          <ChevronRight size={14} style={{ color: '#555555' }} />
+        </button>
         
         <div className="space-y-3">
           {circleTrends.map((trend) => (
             <div
               key={trend.id}
-              className="p-4 rounded-2xl border flex items-center justify-between"
-              style={{ background: 'white', borderColor: '#E5E5E0' }}
+              className="p-4 rounded-[20px] border flex items-center justify-between bg-white"
+              style={{ borderColor: '#E5E5E0' }}
             >
               <div>
                 <p className="text-[14px] font-bold mb-1" style={{ color: '#111111' }}>{trend.topic}</p>
-                <p className="text-[11px]" style={{ color: '#5B8DEF' }}>
+                <p className="text-[11px] font-medium" style={{ color: '#5B8DEF' }}>
                   {trend.count} {trend.description}
                 </p>
               </div>
-              <button className="text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors" style={{ background: '#F0F0EB', color: '#111111' }}>
+              <button 
+                onClick={() => {
+                  const explanation = {
+                    headline: 'Why is this trending?',
+                    intro: `${trend.count} ${trend.description} ${trend.topic.toLowerCase()}.`,
+                    pros: [
+                      'Broad diversification across many assets',
+                      'Simple structure for beginners',
+                      'Commonly used for long-term investing',
+                    ],
+                    cons: [
+                      'Market value can still fall',
+                      'Returns are not guaranteed',
+                      'Different options have different costs',
+                    ],
+                    topic: trend.topic,
+                  };
+                  useAppStore.setState({ explanationOpen: true, explanationData: explanation });
+                }}
+                className="text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors active:scale-[0.98]" style={{ background: '#F0F0EB', color: '#111111' }}
+              >
                 Learn why
               </button>
             </div>
@@ -90,15 +114,58 @@ export function ExploreScreen() {
         </div>
       </div>
 
+      {/* SIGNAL CHECK */}
+      <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.25s' }}>
+        <div className="p-5 rounded-[24px] border border-[#E5E5E0] bg-white relative overflow-hidden">
+          <div className="absolute -right-4 -top-4 opacity-[0.03]">
+            <HelpCircle size={100} className="text-[#111111]" />
+          </div>
+          <h3 className="text-[14px] font-bold mb-2 text-[#111111]">Signal Check</h3>
+          <p className="text-[12px] text-[#555555] mb-5 pr-8 leading-relaxed">
+            Seen something about investing online? Let's check the reality of the claim.
+          </p>
+          <button 
+            onClick={() => useAppStore.setState({ signalCheckOpen: true })}
+            className="w-full py-3.5 bg-[#111111] text-white rounded-xl text-[13px] font-bold active:scale-[0.98]"
+          >
+            Check the idea
+          </button>
+        </div>
+      </div>
+
       {/* LEARN WITHOUT THE NOISE */}
       <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.3s' }}>
         <h3 className="text-[14px] font-bold mb-4" style={{ color: '#111111' }}>Learn without the noise</h3>
-        <div className="flex gap-4 overflow-x-auto pb-2 -mx-5 px-5 phone-scroll">
+        <div className="flex gap-4 overflow-x-auto pb-4 -mx-5 px-5 phone-scroll-x">
           {learnArticles.map((article) => (
-            <div
+            <button
               key={article.id}
-              className="shrink-0 w-[240px] flex flex-col p-4 rounded-2xl border relative overflow-hidden"
-              style={{ background: 'white', borderColor: '#E5E5E0' }}
+              onClick={() => {
+                useAppStore.setState({ 
+                  learningOpen: true, 
+                  learningData: {
+                    category: article.category,
+                    title: article.title,
+                    readTime: article.readTime,
+                    sections: [
+                      {
+                        heading: 'What is it?',
+                        content: `${article.title} is an important concept in investing that helps you build wealth over time. ${article.subtitle}`
+                      },
+                      {
+                        heading: 'Why it matters',
+                        content: 'Understanding this helps you make informed decisions and reduces the fear of the unknown when investing.'
+                      },
+                      {
+                        heading: 'Key takeaway',
+                        content: 'Start small, stay consistent, and keep learning as you go.'
+                      }
+                    ]
+                  }
+                });
+              }}
+              className="shrink-0 w-[240px] flex flex-col p-4 rounded-[20px] border relative overflow-hidden text-left active:scale-[0.98] transition-transform bg-white"
+              style={{ borderColor: '#E5E5E0' }}
             >
               <div className="absolute top-0 left-0 right-0 h-1" style={{ background: '#00D09C' }} />
               
@@ -113,11 +180,11 @@ export function ExploreScreen() {
                 {article.subtitle}
               </p>
               
-              <div className="mt-auto flex items-center gap-1.5 pt-3 border-t" style={{ borderColor: '#F0F0EB' }}>
+              <div className="mt-auto flex items-center gap-1.5 pt-3 border-t w-full" style={{ borderColor: '#F0F0EB' }}>
                 <Clock size={12} style={{ color: '#888888' }} />
                 <span className="text-[10px]" style={{ color: '#888888' }}>{article.readTime}</span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -127,10 +194,16 @@ export function ExploreScreen() {
         <h3 className="text-[14px] font-bold mb-4" style={{ color: '#111111' }}>Popular right now</h3>
         <div className="space-y-3">
           {mockInvestmentOptions.slice(0, 3).map((opt) => (
-            <div 
+            <button 
               key={opt.id}
-              className="p-4 rounded-2xl border"
-              style={{ background: 'white', borderColor: '#E5E5E0' }}
+              onClick={() => {
+                useAppStore.setState({ 
+                  investmentDetailOpen: true, 
+                  investmentData: opt 
+                });
+              }}
+              className="p-4 rounded-[20px] border w-full text-left bg-white active:scale-[0.98] transition-transform"
+              style={{ borderColor: '#E5E5E0' }}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
@@ -156,17 +229,17 @@ export function ExploreScreen() {
               </p>
               
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-semibold px-2 py-1 rounded-md" style={{ 
+                <span className="text-[10px] font-bold px-2 py-1 rounded-md" style={{ 
                   background: opt.risk === 'Low' ? '#E6FAF5' : opt.risk === 'Moderate' ? '#F7F7F2' : '#FFF0F0',
                   color: opt.risk === 'Low' ? '#00B386' : opt.risk === 'Moderate' ? '#555555' : '#EB5757',
                 }}>
                   {opt.risk} risk
                 </span>
-                <span className="text-[10px] font-medium text-[#888888] px-2 py-1 rounded-md" style={{ background: '#F7F7F2' }}>
+                <span className="text-[10px] font-bold text-[#888888] px-2 py-1 rounded-md" style={{ background: '#F7F7F2' }}>
                   Min. ₹{opt.minInvestment}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

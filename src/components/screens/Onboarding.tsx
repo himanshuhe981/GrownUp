@@ -44,7 +44,7 @@ export function Onboarding() {
   };
 
   return (
-    <div className="h-full flex flex-col" style={{ background: '#F7F7F2' }}>
+    <div className="h-full flex flex-col overflow-y-auto phone-scroll" style={{ background: '#F7F7F2' }}>
       {/* Header with Back Button */}
       {onboardingStep > 0 && (
         <div className="flex items-center px-6 pt-14 pb-2 animate-fade-in">
@@ -65,16 +65,16 @@ export function Onboarding() {
           <div className="flex-1 flex flex-col justify-center">
             {/* Minimal Brand Mark */}
             <div className="mb-8">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style={{ background: '#111111' }}>
-                <div className="w-3 h-3 rounded-full" style={{ background: '#00D09C' }} />
-              </div>
+              <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#111111' }}>
+                Grown<span style={{ color: '#00D09C' }}>Up</span>
+              </h1>
             </div>
 
             {/* Headline */}
             <h1 className="text-[40px] leading-[1.05] font-bold tracking-tight mb-5" style={{ color: '#111111' }}>
               Invest with clarity.
               <br />
-              <span style={{ color: '#00D09C' }}>Grow with consistency.</span>
+              <span style={{ color: '#00D09C' }}>Build the habit.</span>
             </h1>
             <p className="text-[15px] leading-relaxed mb-8 max-w-[280px]" style={{ color: '#555555' }}>
               Know what you&apos;re investing in, start small, and build a habit that lasts.
@@ -270,21 +270,21 @@ export function Onboarding() {
             {/* The Plan Overview */}
             <div className="grid grid-cols-3 gap-3">
               <div className="p-4 rounded-2xl border" style={{ background: 'white', borderColor: '#E5E5E0' }}>
-                <Target size={18} style={{ color: '#5B8DEF', mb: 8 }} className="mb-2" />
+                <Target size={18} style={{ color: '#5B8DEF' }} className="mb-2" />
                 <p className="text-[11px] font-semibold mb-0.5" style={{ color: '#888888' }}>Goal</p>
                 <p className="text-[13px] font-bold" style={{ color: '#111111' }}>
                   {goalOptions.find(g => g.id === selectedGoal)?.label}
                 </p>
               </div>
               <div className="p-4 rounded-2xl border" style={{ background: 'white', borderColor: '#E5E5E0' }}>
-                <Clock size={18} style={{ color: '#F5A623', mb: 8 }} className="mb-2" />
+                <Clock size={18} style={{ color: '#F5A623' }} className="mb-2" />
                 <p className="text-[11px] font-semibold mb-0.5" style={{ color: '#888888' }}>Time</p>
                 <p className="text-[13px] font-bold" style={{ color: '#111111' }}>
                   {timeHorizonOptions.find(t => t.id === selectedHorizon)?.label}
                 </p>
               </div>
               <div className="p-4 rounded-2xl border" style={{ background: 'white', borderColor: '#E5E5E0' }}>
-                <Activity size={18} style={{ color: '#00D09C', mb: 8 }} className="mb-2" />
+                <Activity size={18} style={{ color: '#00D09C' }} className="mb-2" />
                 <p className="text-[11px] font-semibold mb-0.5" style={{ color: '#888888' }}>Risk</p>
                 <p className="text-[13px] font-bold" style={{ color: '#111111' }}>
                   {riskProfile}

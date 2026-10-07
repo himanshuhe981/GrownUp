@@ -2,7 +2,7 @@
 
 import { useAppStore } from '@/lib/store';
 import { mockUser, mockChartData, formatCurrency } from '@/lib/data';
-import { Bell, Sparkles, TrendingUp, CircleDollarSign, Search, BookOpen, ArrowUpRight, ArrowDownRight, Flame, Users, CheckCircle2 } from 'lucide-react';
+import { Bell, Sparkles, TrendingUp, CircleDollarSign, Search, BookOpen, ArrowUpRight, ArrowDownRight, Flame, Users, CheckCircle2, ArrowRight } from 'lucide-react';
 import { MiniChart } from '../ui/MiniChart';
 
 export function HomeScreen() {
@@ -67,14 +67,19 @@ export function HomeScreen() {
       {/* 2. AI ENTRY POINT: Compact pill */}
       <button 
         onClick={() => setAiOpen(true)}
-        className="w-full flex items-center justify-between p-3.5 rounded-full mb-6 transition-all duration-200 active:scale-[0.98] animate-slide-up"
-        style={{ background: '#111111', color: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
+        className="w-full flex items-center justify-between p-4 rounded-[20px] mb-6 transition-all duration-200 active:scale-[0.98] animate-slide-up bg-white border"
+        style={{ borderColor: '#E5E5E0' }}
       >
-        <div className="flex items-center gap-2.5">
-          <Sparkles size={16} style={{ color: '#00D09C' }} />
-          <span className="text-sm font-medium">Ask GrownUp AI</span>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#F7F7F2]">
+            <Sparkles size={16} style={{ color: '#00D09C' }} />
+          </div>
+          <div className="text-left">
+            <span className="text-[14px] font-bold block text-[#111111]">Ask GrownUp AI</span>
+            <span className="text-[12px] block text-[#888888]">Explain something about your money</span>
+          </div>
         </div>
-        <span className="text-xs" style={{ color: '#888888' }}>Explain something about your money</span>
+        <ArrowRight size={16} style={{ color: '#888888' }} />
       </button>
 
       {/* 3. PORTFOLIO VALUE & PERFORMANCE */}
@@ -118,55 +123,37 @@ export function HomeScreen() {
         </div>
       </div>
 
-      {/* 4. MONEY FITNESS (Goals / progress / habits) */}
+      {/* 4. MONEY FITNESS (Clickable Card) */}
       <div className="mb-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold" style={{ color: '#111111' }}>Your Money Fitness</h3>
-        </div>
-        
-        <div className="p-4 rounded-2xl" style={{ background: 'white', border: '1px solid #E5E5E0' }}>
-          {/* Top stats row */}
-          <div className="flex items-center justify-between mb-4 pb-4" style={{ borderBottom: '1px solid #F0F0EB' }}>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#FFF4E5' }}>
-                <Flame size={20} style={{ color: '#F5A623' }} />
-              </div>
-              <div>
-                <p className="text-base font-bold" style={{ color: '#111111' }}>{moneyFitness.streakMonths} months</p>
-                <p className="text-[11px]" style={{ color: '#888888' }}>investing streak</p>
-              </div>
+        <button 
+          onClick={() => useAppStore.setState({ moneyFitnessOpen: true })}
+          className="w-full text-left p-5 rounded-[24px] transition-all duration-200 active:scale-[0.98] border border-[#E5E5E0] bg-white relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-5">
+            <Flame size={48} className="opacity-10" style={{ color: '#F5A623' }} />
+          </div>
+          
+          <h3 className="text-[11px] font-bold tracking-widest uppercase mb-4" style={{ color: '#888888' }}>Your Money Fitness</h3>
+          
+          <div className="flex items-center gap-2 mb-2">
+            <Flame size={20} style={{ color: '#F5A623' }} />
+            <p className="text-[22px] font-bold text-[#111111]">{moneyFitness.streakMonths} month streak</p>
+          </div>
+          
+          <p className="text-[13px] font-medium text-[#555555] mb-5">
+            You're building the habit.
+          </p>
+          
+          <div className="flex items-center justify-between pt-4 border-t border-[#F0F0EB]">
+            <div>
+              <p className="text-[11px] text-[#888888]">Next milestone</p>
+              <p className="text-[13px] font-bold text-[#111111]">{moneyFitness.milestone}</p>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-bold" style={{ color: '#111111' }}>Next milestone</p>
-              <p className="text-[11px]" style={{ color: '#5B8DEF' }}>{moneyFitness.milestone}</p>
+            <div className="flex items-center gap-1 text-[13px] font-bold" style={{ color: '#00D09C' }}>
+              View progress <ArrowRight size={14} />
             </div>
           </div>
-
-          {/* Checklist */}
-          <div className="space-y-3">
-            <div className="flex items-start gap-2.5">
-              <CheckCircle2 size={16} style={{ color: moneyFitness.monthlyConsistent ? '#00D09C' : '#E5E5E0', marginTop: '2px' }} />
-              <div>
-                <p className="text-sm font-medium" style={{ color: '#111111' }}>SIP completed this month</p>
-                <p className="text-[11px]" style={{ color: '#888888' }}>Consistency builds wealth.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <CheckCircle2 size={16} style={{ color: '#00D09C', marginTop: '2px' }} />
-              <div>
-                <p className="text-sm font-medium" style={{ color: '#111111' }}>{goals.length} goals progressing</p>
-                <p className="text-[11px]" style={{ color: '#888888' }}>Emergency fund is 36% funded.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <CheckCircle2 size={16} style={{ color: '#00D09C', marginTop: '2px' }} />
-              <div>
-                <p className="text-sm font-medium" style={{ color: '#111111' }}>{moneyFitness.conceptsLearned} concepts learned</p>
-                <p className="text-[11px]" style={{ color: '#888888' }}>Knowledge is compounding.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        </button>
       </div>
 
       {/* 5. QUICK ACTIONS */}
@@ -200,24 +187,45 @@ export function HomeScreen() {
 
       {/* 6. TRENDING IN YOUR CIRCLE */}
       <div className="mb-6 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-        <div className="flex items-center gap-2 mb-3">
+        <button 
+          onClick={() => useAppStore.setState({ circleOpen: true })}
+          className="flex items-center gap-2 mb-3 active:scale-[0.98] transition-transform"
+        >
           <Users size={16} style={{ color: '#5B8DEF' }} />
           <h3 className="text-sm font-semibold" style={{ color: '#111111' }}>Trending in your Circle</h3>
-        </div>
+          <ArrowRight size={14} style={{ color: '#555555' }} />
+        </button>
         
-        <div className="flex gap-3 overflow-x-auto pb-2 phone-scroll -mx-5 px-5">
+        <div className="flex gap-3 overflow-x-auto pb-4 phone-scroll-x -mx-5 px-5">
           {circleTrends.map((trend) => (
             <button
               key={trend.id}
-              onClick={() => setScreen('explore')}
-              className="min-w-[160px] p-4 rounded-2xl text-left border"
+              onClick={() => {
+                const explanation = {
+                  headline: 'Why is this trending?',
+                  intro: `${trend.count} ${trend.description} ${trend.topic.toLowerCase()}.`,
+                  pros: [
+                    'Broad diversification across many assets',
+                    'Simple structure for beginners',
+                    'Commonly used for long-term investing',
+                  ],
+                  cons: [
+                    'Market value can still fall',
+                    'Returns are not guaranteed',
+                    'Different options have different costs',
+                  ],
+                  topic: trend.topic,
+                };
+                useAppStore.setState({ explanationOpen: true, explanationData: explanation });
+              }}
+              className="min-w-[160px] p-4 rounded-[20px] text-left border transition-all duration-200 active:scale-[0.98]"
               style={{ background: 'white', borderColor: '#E5E5E0' }}
             >
               <p className="text-sm font-bold mb-1" style={{ color: '#111111' }}>{trend.topic}</p>
-              <p className="text-[11px] mb-3" style={{ color: '#5B8DEF' }}>
+              <p className="text-[11px] mb-4 font-medium" style={{ color: '#5B8DEF' }}>
                 {trend.count} {trend.description}
               </p>
-              <span className="text-[10px] font-medium px-2 py-1 rounded-md" style={{ background: '#F0F0EB', color: '#555555' }}>
+              <span className="text-[10px] font-bold px-2 py-1.5 rounded-lg" style={{ background: '#F0F0EB', color: '#555555' }}>
                 Learn why
               </span>
             </button>
@@ -265,8 +273,31 @@ export function HomeScreen() {
       <div className="animate-slide-up" style={{ animationDelay: '0.6s' }}>
         <h3 className="text-sm font-semibold mb-3" style={{ color: '#111111' }}>Learn without the noise</h3>
         <button 
-          onClick={() => setAiOpen(true)}
-          className="w-full text-left p-4 rounded-2xl border"
+          onClick={() => {
+            useAppStore.setState({ 
+              learningOpen: true, 
+              learningData: {
+                category: 'Basics',
+                title: 'What exactly is an ETF?',
+                readTime: '3 min',
+                sections: [
+                  {
+                    heading: 'What is it?',
+                    content: 'An Exchange Traded Fund (ETF) is a basket of securities that trades on an exchange just like a stock does. It tracks an underlying index, rather than picking individual stocks.'
+                  },
+                  {
+                    heading: 'How it works',
+                    content: 'When you buy an ETF, you are buying a tiny fraction of all the companies in that index. It gives you instant diversification with a single trade.'
+                  },
+                  {
+                    heading: 'Key takeaway',
+                    content: 'ETFs combine the diversification of a mutual fund with the flexibility of trading like a stock, often with lower fees.'
+                  }
+                ]
+              }
+            });
+          }}
+          className="w-full text-left p-4 rounded-[24px] border transition-all duration-200 active:scale-[0.98]"
           style={{ background: '#F0F0EB', borderColor: '#E5E5E0' }}
         >
           <div className="flex items-start justify-between">

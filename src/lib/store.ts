@@ -73,6 +73,30 @@ interface AppState {
   // Goal creation
   goalCreationOpen: boolean;
   setGoalCreationOpen: (open: boolean) => void;
+
+  // Additional Panels
+  moneyFitnessOpen: boolean;
+  setMoneyFitnessOpen: (open: boolean) => void;
+  signalCheckOpen: boolean;
+  setSignalCheckOpen: (open: boolean) => void;
+  circleOpen: boolean;
+  setCircleOpen: (open: boolean) => void;
+  explanationOpen: boolean;
+  explanationData: any;
+  openExplanation: (data: any) => void;
+  closeExplanation: () => void;
+
+  learningOpen: boolean;
+  learningData: any;
+  openLearning: (data: any) => void;
+  closeLearning: () => void;
+  markLearned: () => void;
+
+  investmentDetailOpen: boolean;
+  investmentData: any;
+
+  moneyWrappedOpen: boolean;
+  setMoneyWrappedOpen: (open: boolean) => void;
 }
 
 function getRiskProfile(comfort: RiskComfort): RiskProfile {
@@ -196,4 +220,33 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Goal creation
   goalCreationOpen: false,
   setGoalCreationOpen: (open) => set({ goalCreationOpen: open }),
+
+  // Additional Panels
+  moneyFitnessOpen: false,
+  setMoneyFitnessOpen: (open) => set({ moneyFitnessOpen: open }),
+  signalCheckOpen: false,
+  setSignalCheckOpen: (open) => set({ signalCheckOpen: open }),
+  circleOpen: false,
+  setCircleOpen: (open) => set({ circleOpen: open }),
+  explanationOpen: false,
+  explanationData: null,
+  openExplanation: (data) => set({ explanationOpen: true, explanationData: data }),
+  closeExplanation: () => set({ explanationOpen: false, explanationData: null }),
+
+  learningOpen: false,
+  learningData: null,
+  openLearning: (data) => set({ learningOpen: true, learningData: data }),
+  closeLearning: () => set({ learningOpen: false, learningData: null }),
+  markLearned: () => set((state) => ({
+    moneyFitness: {
+      ...state.moneyFitness,
+      conceptsLearned: state.moneyFitness.conceptsLearned + 1
+    }
+  })),
+
+  investmentDetailOpen: false,
+  investmentData: null,
+
+  moneyWrappedOpen: false,
+  setMoneyWrappedOpen: (open) => set({ moneyWrappedOpen: open }),
 }));
