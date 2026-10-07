@@ -16,7 +16,7 @@ export function BottomNav() {
 
   return (
     <nav 
-      className="absolute bottom-0 left-0 right-0 z-30 glass"
+      className="z-30 glass bg-white shrink-0"
       style={{ 
         borderTop: '1px solid #E5E5E0',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',

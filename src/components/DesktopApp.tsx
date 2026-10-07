@@ -13,8 +13,15 @@ import { InvestFlow } from './screens/InvestFlow';
 import { AIChat } from './screens/AIChat';
 import { NotificationsPanel } from './ui/NotificationsPanel';
 import { GoalCreation } from './screens/GoalCreation';
+import { MoneyFitnessSheet } from './screens/MoneyFitnessSheet';
+import { CircleSheet } from './screens/CircleSheet';
+import { SignalCheckSheet } from './screens/SignalCheckSheet';
+import { ContextualExplanationSheet } from './screens/ContextualExplanationSheet';
+import { LearningSheet } from './screens/LearningSheet';
+import { InvestmentDetailSheet } from './screens/InvestmentDetailSheet';
+import { MoneyWrappedSheet } from './screens/MoneyWrappedSheet';
 import type { AppScreen } from '@/lib/types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const categoryIcons: Record<string, typeof PieChart> = {
   'pie-chart': PieChart,
@@ -35,7 +42,9 @@ export function DesktopApp() {
     setAiOpen, setInvestFlowOpen, setNotificationsOpen, setGoalCreationOpen,
     investFlowOpen, aiOpen, notificationsOpen, goalCreationOpen,
     onboardingComplete, completeOnboarding,
-    moneyFitness, circleTrends
+    moneyFitness, circleTrends,
+    moneyFitnessOpen, circleOpen, signalCheckOpen,
+    explanationOpen, learningOpen, investmentDetailOpen, moneyWrappedOpen
   } = useAppStore();
 
   const hour = new Date().getHours();
@@ -45,9 +54,11 @@ export function DesktopApp() {
   const totalInvested = holdings.reduce((sum, h) => sum + h.invested, 0);
   const totalCurrent = holdings.reduce((sum, h) => sum + h.current, 0);
 
-  if (!onboardingComplete) {
-    completeOnboarding();
-  }
+  useEffect(() => {
+    if (!onboardingComplete) {
+      completeOnboarding();
+    }
+  }, [onboardingComplete, completeOnboarding]);
 
   const navItems: { id: AppScreen; label: string; icon: typeof Home }[] = [
     { id: 'home', label: 'Home', icon: Home },
@@ -147,7 +158,7 @@ export function DesktopApp() {
               style={{ background: 'white', color: '#111111', border: '1px solid #E5E5E0' }}
             >
               <Sparkles size={16} style={{ color: '#00D09C' }} />
-              Ask Groww AI
+              Ask GrownUp AI
             </button>
             <button 
               onClick={() => setNotificationsOpen(true)}
@@ -215,8 +226,14 @@ export function DesktopApp() {
                 {/* Right column: Fitness + Actions */}
                 <div className="space-y-6">
                   {/* Money Fitness block */}
-                  <div className="p-6 rounded-[24px]" style={{ background: 'white', border: '1px solid #E5E5E0' }}>
-                    <h3 className="text-[15px] font-bold mb-4 text-[#111111]">Your Money Fitness</h3>
+                  <button 
+                    onClick={() => useAppStore.setState({ moneyFitnessOpen: true })}
+                    className="w-full text-left p-6 rounded-[24px] border border-[#E5E5E0] bg-white transition-transform active:scale-[0.98] hover:border-[#111111] relative overflow-hidden" 
+                  >
+                    <div className="absolute top-0 right-0 p-5">
+                      <Flame size={48} className="opacity-10" style={{ color: '#F5A623' }} />
+                    </div>
+                    <h3 className="text-[11px] font-bold tracking-widest uppercase mb-4 text-[#888888]">Your Money Fitness</h3>
                     <div className="flex items-center gap-4 mb-5 pb-5 border-b border-[#F0F0EB]">
                       <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[#FFF4E5]">
                         <Flame size={24} style={{ color: '#F5A623' }} />
@@ -226,17 +243,11 @@ export function DesktopApp() {
                         <p className="text-xs text-[#888888]">investing streak</p>
                       </div>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2.5">
-                        <CheckCircle2 size={16} style={{ color: '#00D09C', marginTop: '2px' }} />
-                        <p className="text-[13px] font-bold text-[#111111]">SIP completed this month</p>
-                      </div>
-                      <div className="flex items-start gap-2.5">
-                        <CheckCircle2 size={16} style={{ color: '#00D09C', marginTop: '2px' }} />
-                        <p className="text-[13px] font-bold text-[#111111]">{goals.length} goals progressing</p>
-                      </div>
+                    <div className="flex items-center justify-between text-[#00D09C]">
+                      <span className="text-[13px] font-bold">View your progress</span>
+                      <ArrowRight size={16} />
                     </div>
-                  </div>
+                  </button>
 
                   {/* Quick actions */}
                   <div className="grid grid-cols-2 gap-3">
@@ -286,17 +297,43 @@ export function DesktopApp() {
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold mb-4 text-[#111111] flex items-center gap-2">
+                  <button 
+                    onClick={() => useAppStore.setState({ circleOpen: true })}
+                    className="text-base font-bold mb-4 text-[#111111] flex items-center gap-2 hover:opacity-80 transition-opacity"
+                  >
                     <Users size={18} style={{ color: '#5B8DEF' }} /> Trending in your Circle
-                  </h3>
+                    <ChevronRight size={16} className="text-[#888888] ml-1" />
+                  </button>
                   <div className="space-y-3">
                     {circleTrends.map((trend) => (
-                      <div key={trend.id} className="p-5 rounded-[24px] border" style={{ background: 'white', borderColor: '#E5E5E0' }}>
-                        <p className="text-[15px] font-bold mb-1 text-[#111111]">{trend.topic}</p>
-                        <p className="text-[12px] text-[#5B8DEF] mb-4">
-                          {trend.count} {trend.description}
-                        </p>
-                        <button className="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-[#F0F0EB] text-[#111111]">
+                      <div key={trend.id} className="p-5 rounded-[24px] border flex justify-between items-center" style={{ background: 'white', borderColor: '#E5E5E0' }}>
+                        <div>
+                          <p className="text-[15px] font-bold mb-1 text-[#111111]">{trend.topic}</p>
+                          <p className="text-[12px] font-medium text-[#5B8DEF] mb-0">
+                            {trend.count} {trend.description}
+                          </p>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            const explanation = {
+                              headline: 'Why is this trending?',
+                              intro: `${trend.count} ${trend.description} ${trend.topic.toLowerCase()}.`,
+                              pros: [
+                                'Broad diversification across many assets',
+                                'Simple structure for beginners',
+                                'Commonly used for long-term investing',
+                              ],
+                              cons: [
+                                'Market value can still fall',
+                                'Returns are not guaranteed',
+                                'Different options have different costs',
+                              ],
+                              topic: trend.topic,
+                            };
+                            useAppStore.setState({ explanationOpen: true, explanationData: explanation });
+                          }}
+                          className="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-[#F0F0EB] text-[#111111] hover:bg-[#E5E5E0] active:scale-95 transition-all"
+                        >
                           Learn why
                         </button>
                       </div>
@@ -346,7 +383,11 @@ export function DesktopApp() {
                   <h3 className="text-lg font-bold mb-5 text-[#111111]">Popular right now</h3>
                   <div className="space-y-4">
                     {mockInvestmentOptions.map((opt) => (
-                      <div key={opt.id} className="p-6 rounded-[24px] border" style={{ background: 'white', borderColor: '#E5E5E0' }}>
+                      <button 
+                        key={opt.id} 
+                        onClick={() => useAppStore.setState({ investmentDetailOpen: true, investmentData: opt })}
+                        className="w-full text-left p-6 rounded-[24px] border bg-white hover:border-[#111111] active:scale-[0.98] transition-all" style={{ borderColor: '#E5E5E0' }}
+                      >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-[#F7F7F2]">
@@ -377,7 +418,7 @@ export function DesktopApp() {
                             Min. ₹{opt.minInvestment}
                           </span>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -386,7 +427,34 @@ export function DesktopApp() {
                   <h3 className="text-lg font-bold mb-5 text-[#111111]">Learn without the noise</h3>
                   <div className="grid grid-cols-1 gap-4">
                     {learnArticles.map((article) => (
-                      <div key={article.id} className="flex flex-col p-5 rounded-[24px] border relative overflow-hidden" style={{ background: 'white', borderColor: '#E5E5E0' }}>
+                      <button 
+                        key={article.id} 
+                        onClick={() => {
+                          useAppStore.setState({ 
+                            learningOpen: true, 
+                            learningData: {
+                              category: article.category,
+                              title: article.title,
+                              readTime: article.readTime,
+                              sections: [
+                                {
+                                  heading: 'What is it?',
+                                  content: `${article.title} is an important concept in investing that helps you build wealth over time. ${article.subtitle}`
+                                },
+                                {
+                                  heading: 'Why it matters',
+                                  content: 'Understanding this helps you make informed decisions and reduces the fear of the unknown when investing.'
+                                },
+                                {
+                                  heading: 'Key takeaway',
+                                  content: 'Start small, stay consistent, and keep learning as you go.'
+                                }
+                              ]
+                            }
+                          });
+                        }}
+                        className="flex flex-col text-left p-5 rounded-[24px] border relative overflow-hidden bg-white hover:border-[#111111] active:scale-[0.98] transition-all" style={{ borderColor: '#E5E5E0' }}
+                      >
                         <div className="absolute top-0 left-0 right-0 h-1.5" style={{ background: '#00D09C' }} />
                         <span className="text-[11px] font-bold px-2.5 py-1 rounded-md self-start mb-3 uppercase tracking-widest bg-[#111111] text-white">
                           {article.category}
@@ -397,11 +465,11 @@ export function DesktopApp() {
                         <p className="text-[13px] mb-4 text-[#555555]">
                           {article.subtitle}
                         </p>
-                        <div className="mt-auto flex items-center gap-1.5 pt-4 border-t border-[#F0F0EB]">
+                        <div className="mt-auto flex items-center gap-1.5 pt-4 border-t border-[#F0F0EB] w-full">
                           <Clock size={14} style={{ color: '#888888' }} />
                           <span className="text-[12px] font-medium text-[#888888]">{article.readTime}</span>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -566,6 +634,55 @@ export function DesktopApp() {
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
           <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
             <GoalCreation />
+          </div>
+        </div>
+      )}
+      {moneyFitnessOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <MoneyFitnessSheet />
+          </div>
+        </div>
+      )}
+      {circleOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <CircleSheet />
+          </div>
+        </div>
+      )}
+      {signalCheckOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <SignalCheckSheet />
+          </div>
+        </div>
+      )}
+      {explanationOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <ContextualExplanationSheet />
+          </div>
+        </div>
+      )}
+      {learningOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <LearningSheet />
+          </div>
+        </div>
+      )}
+      {investmentDetailOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <InvestmentDetailSheet />
+          </div>
+        </div>
+      )}
+      {moneyWrappedOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-[420px] h-[700px] rounded-3xl overflow-hidden shadow-2xl relative">
+            <MoneyWrappedSheet />
           </div>
         </div>
       )}
